@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 # Getting Started with Create React App
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
@@ -68,3 +69,7 @@ This section has moved here: [https://facebook.github.io/create-react-app/docs/d
 ### `npm run build` fails to minify
 
 This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+=======
+# Ohiz-Villa-Admin
+ Admin Panel for Ohiz Villa  (Off-Campus Student Accommodation Payment Portal): This repository hosts the code for a robust admin panel designed to manage and process payments for off-campus student housing. It features user authentication and creation, lodge and room tracking to ensure a seamless operational flow for accommodation providers.
+>>>>>>> 1078276f9578e49642192ca8b85643645e0f03dc
