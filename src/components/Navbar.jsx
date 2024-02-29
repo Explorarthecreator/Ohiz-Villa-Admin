@@ -1,5 +1,7 @@
 import { useNavigate, useLocation } from "react-router-dom"
-import {FaUser, FaBuilding, FaBed} from 'react-icons/fa'
+import {FaUser, FaBuilding, FaBed, FaTimes} from 'react-icons/fa'
+import { useContext } from "react"
+import navbarContext from "../context/navbarContext"
 function Navbar() {
     const navigate = useNavigate() 
     const location = useLocation()
@@ -9,10 +11,14 @@ function Navbar() {
             return true
         }
     }
+    const {shownav,setShownav} = useContext(navbarContext)
   return (
-        <nav className="w-1/5 h-screen bg-[#6a6969] text-[#323131] flex flex-col items-center py-9 gap-12">
+        <nav className={` ${shownav?'absolute top-0 left-0':'hidden lg:flex'} w-1/3 lg:w-1/5 h-screen bg-[#6a6969] text-[#323131] flex flex-col items-center py-9 gap-12`}>
+            <p className="absolute top-0 right-3 cursor-pointer text-2xl" onClick={()=>{setShownav(!shownav  )}}>
+                <FaTimes />
+            </p>
             <div className=" bg-red-500 w-28 h-28 rounded-full"></div>
-            <ul className=" w-2/3">
+            <ul className=" w-full md:w-4/5 lg:w-2/3">
                 <li className={`cursor-pointer flex px-4 py-2 gap-4 items-center ${pathMatchRoute('/')?'bg-[#b4cd93] rounded-lg':''}`} onClick={()=>navigate('/')}>
                     {/* <ExploreIcon fill={pathMatchRoute('/')?'#2c2c2c':'#8f8f8f'} width={'36px'} height={'36px'}/> */}
                     <FaUser size={25}/>
