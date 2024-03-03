@@ -3,6 +3,8 @@ import Navbar from "./components/Navbar";
 import Room from "./pages/Room";
 import User from "./pages/User";
 import Lodge from "./pages/Lodge";
+import Signin from "./pages/Signin";
+import Signup from "./pages/Signup";
 import MainNav from "./components/MainNav";
 import { NavbarProvider } from "./context/navbarContext";
 function App() {
@@ -12,13 +14,13 @@ function App() {
         <Router>
           <Navbar/>
           <main className=" w-full lg:w-4/5 overflow-y-scroll h-screen overflow-x-hidden bg-white">
-            <div className="w-full bg-slate-400 shadow-2xl">
-              <MainNav/>
-            </div>
+            <MainNav/>
             <Routes>
               <Route path="/" element={<User/>}/>
               <Route path="/room" element={<Room/>}/>
               <Route path="/lodge" element={<Lodge/>}/>
+              <Route path="/signin" element={<Signin/>}/>
+              <Route path="/signup" element={<Signup/>}/>
             </Routes>
           </main>
         </Router>
