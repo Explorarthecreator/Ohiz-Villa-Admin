@@ -13,8 +13,8 @@ function Navbar() {
     }
     const {shownav,setShownav} = useContext(navbarContext)
   return (
-        <nav className={` ${shownav?'absolute top-0 left-0':'hidden lg:flex'} w-1/3 lg:w-1/5 h-screen bg-[#6a6969] text-[#323131] flex flex-col items-center py-9 gap-12`}>
-            <p className="absolute top-0 right-3 cursor-pointer text-2xl" onClick={()=>{setShownav(!shownav  )}}>
+        <nav className={` ${shownav?'absolute top-0 left-0 z-40':'hidden lg:flex'} w-1/2 lg:w-1/5 h-screen bg-[#f2f4f8] text-[#323131] flex flex-col items-center py-9 gap-12`}>
+            <p className="absolute top-3 right-2 cursor-pointer text-2xl lg:hidden" onClick={()=>{setShownav(!shownav  )}}>
                 <FaTimes />
             </p>
             <div className=" bg-red-500 w-28 h-28 rounded-full"></div>
