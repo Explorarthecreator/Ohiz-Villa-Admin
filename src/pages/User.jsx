@@ -1,9 +1,46 @@
 
+import { useEffect, useState } from "react"
 import { FaPlus } from "react-icons/fa"
+import { getAuth, createUserWithEmailAndPassword } from "firebase/auth"
+import { setDoc, doc, serverTimestamp } from "firebase/firestore"
+import { db } from "../firebase.config"
 
 function User() {
-  const handleClick=(e)=>{
+  const [formData,setFormData] = useState({
+    name:'',
+    email:'',
+    password:'',
+    duty:''
+  })
+  const {name,email,password,duty} = formData
+  const onChange = (e)=>{
+    setFormData((prevState)=>({
+      ...prevState,
+      [e.target.id]:e.target.value
+    }))
+  }
+  const handleClick=async(e)=>{
     e.preventDefault()
+    try {
+      const auth = getAuth()
+
+      const userCredential = await createUserWithEmailAndPassword(auth,email,password)
+
+      const user = userCredential.user
+
+      const formDataCopy = {...formData}
+
+      delete formDataCopy.password
+
+      formDataCopy.timestamp =serverTimestamp()
+
+      await setDoc(doc(db,'users',user.uid),formDataCopy)
+
+      console.log('done');
+    } catch (error) {
+      console.log('error');
+      console.log(error);
+    }
   }
   return (
     <div className=' p-3 lg:p-8'>
@@ -20,22 +57,22 @@ function User() {
             {/* if there is a button in form, it will close the modal */}
 
             <div>
-              <input type="text" className=" input input-md w-full input-bordered input-success mb-2 bg-transparent" placeholder="Enter Full name" />
+              <input type="text" className=" input input-md w-full input-bordered input-success mb-2 bg-transparent" placeholder="Enter Full name" id="name" value={name} onChange={onChange}/>
             </div>
 
             <div>
-              <input type="password" className="input input-md w-full input-bordered input-success mb-2 bg-transparent" placeholder="Enter password" />
+              <input type="password" className="input input-md w-full input-bordered input-success mb-2 bg-transparent" placeholder="Enter password" id="password" value={password} onChange={onChange}/>
             </div>
-
+{/* 
             <div>
               <input type="password" className="input input-md w-full input-bordered input-success mb-2 bg-transparent" placeholder="Confirm password" />
-            </div>
+            </div> */}
 
             <div>
-              <input type="email" className="input input-md w-full input-bordered input-success mb-2 bg-transparent" placeholder="Enter email" />
+              <input type="email" className="input input-md w-full input-bordered input-success mb-2 bg-transparent" placeholder="Enter email" id="email" value={email} onChange={onChange} />
             </div>
             <div>
-              <select className="select select-md w-full max-w-xs bg-transparent input-success" >
+              <select className="select select-md w-full max-w-xs bg-transparent input-success" id="duty" value={duty} onChange={onChange} >
                 <option value={'val'}>Choose user's authorisation</option>
                 <option value={'Agent'}>
                   Agent
