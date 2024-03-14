@@ -46,10 +46,10 @@ function Signin() {
         </h1>
         <div>
           {/* <FaAddressBook/> */}
-          <input type="email" className=" input input-sm lg:input-md w-full bg-transparent input-success" placeholder="Username or Email" id="email" value={email} onChange={onChange}/>
+          <input type="email" className=" input input-sm lg:input-md w-full bg-transparent input-success" placeholder="Username or Email" id="email" value={email} onChange={onChange} required/>
         </div>
         <div>
-          <input type="password" className=" input input-sm lg:input-md w-full bg-transparent input-success" placeholder="password" id='password' value={password} onChange={onChange}/>
+          <input type="password" className=" input input-sm lg:input-md w-full bg-transparent input-success" placeholder="password" id='password' value={password} onChange={onChange} required/>
         </div>
 
         <button type="submit" className="btn w-2/5 mx-auto">
