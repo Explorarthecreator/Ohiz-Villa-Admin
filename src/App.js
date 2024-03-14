@@ -24,7 +24,9 @@ function App() {
                 <Route path="/room" element={<Room/>}/>
               </Route>
               {/* <Route path="/room" element={<Room/>}/> */}
-              <Route path="/lodge" element={<Lodge/>}/>
+              <Route path="/lodge" element={<PrivateRoute/>}>
+                <Route path="/lodge" element={<Lodge/>}/>
+              </Route>
               <Route path="/signin" element={<Signin/>}/>
             </Routes>
           </main>
