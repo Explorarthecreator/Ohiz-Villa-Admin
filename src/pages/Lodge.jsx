@@ -1,9 +1,45 @@
-import { useState } from "react";
+import { getAuth } from "firebase/auth";
+import { useState, useEffect } from "react";
+import { doc, getDoc } from "firebase/firestore";
+import { db } from "../firebase.config";
 import { FaPlus } from "react-icons/fa"
+import Spinner from "../components/Spinner";
 
 function Lodge() {
   const handleClick=(e)=>{
     e.preventDefault()
+  }
+
+  const auth = getAuth()
+
+  const [workerDuty, setWorkerDuty] = useState('')
+  const [loading,setLoading]= useState(true)
+
+  useEffect(()=>{
+    const checkDutyLevel = async()=>{
+      const userRef = doc(db,'users', auth.currentUser.uid)
+
+      const querySnap = await getDoc(userRef)
+
+      if(querySnap.exists()){
+          console.log('Exists');
+          // console.log(querySnap.data());
+          // console.log(querySnap.data().duty);
+          setWorkerDuty(querySnap.data().duty)
+          setLoading(false)
+          // console.log(workerDuty);
+      }
+      else{
+          console.log("Not Available and you need to log out and sign in again");
+      }
+
+    }
+    checkDutyLevel()
+    console.log('We are here');
+  },[])
+
+  if(loading){
+    return <Spinner/>
   }
   return (
     <div className=' p-3 lg:p-8'>
@@ -44,7 +80,7 @@ function Lodge() {
           </p>
         </div>
 
-        <button className='btn btn-ghost btn-sm lg:btn-md' onClick={()=>document.getElementById('my_modal_3').showModal()}>
+        <button className={`btn btn-ghost btn-sm lg:btn-md ${workerDuty === 'Agent'&&'hidden'}`} disabled={workerDuty==='Agent'? true:false} onClick={()=>document.getElementById('my_modal_3').showModal()}>
           <FaPlus/> Create Lodge
         </button>
       </header>
