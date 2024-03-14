@@ -13,12 +13,12 @@ function Navbar() {
     }
     const {shownav,setShownav} = useContext(navbarContext)
   return (
-        <nav className={` ${shownav?'absolute top-0 left-0 z-40':'hidden lg:flex'} w-1/2 lg:w-1/5 h-screen bg-[#f2f4f8] text-[#323131] flex flex-col items-center py-9 gap-12`}>
-            <p className="absolute top-3 right-2 cursor-pointer text-2xl lg:hidden" onClick={()=>{setShownav(!shownav  )}}>
+        <nav className={` ${shownav?'absolute top-0 left-0 z-40':'hidden lg:flex'} w-2/3 md:w-1/2 lg:w-1/5 h-screen bg-[#f2f4f8] text-[#323131] flex flex-col items-center py-9 gap-12`}>
+            <p className="absolute top-5 right-4 cursor-pointer text-2xl lg:hidden" onClick={()=>{setShownav(!shownav  )}}>
                 <FaTimes />
             </p>
             <div className=" bg-red-500 w-28 h-28 rounded-full"></div>
-            <ul className=" w-full md:w-4/5 lg:w-2/3">
+            <ul className=" w-4/5 md:w-4/5 lg:w-2/3">
                 <li className={`cursor-pointer flex px-4 py-2 gap-4 items-center ${pathMatchRoute('/')?'bg-[#b4cd93] rounded-lg':''}`} onClick={()=>navigate('/')}>
                     {/* <ExploreIcon fill={pathMatchRoute('/')?'#2c2c2c':'#8f8f8f'} width={'36px'} height={'36px'}/> */}
                     <FaUser size={25}/>
