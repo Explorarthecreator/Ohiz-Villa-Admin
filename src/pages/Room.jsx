@@ -1,18 +1,65 @@
 import { useState, useEffect } from "react";
 import { FaPlus } from "react-icons/fa"
 import { getAuth } from "firebase/auth";
-import { doc, getDoc } from "firebase/firestore";
+import { addDoc, collection, doc, getDoc, getDocs, query, serverTimestamp, setDoc, where } from "firebase/firestore";
 import { db } from "../firebase.config";
 import Spinner from "../components/Spinner";
+import RoomItem from "../components/RoomItem";
 
 function Room() {
-  const handleClick=(e)=>{
-    e.preventDefault()
-  }
+ 
 
   const auth = getAuth()
   const [workerDuty, setWorkerDuty] = useState('')
   const [loading, setLoading] = useState(true)
+  const [rooms, setRooms] = useState([])
+  const [minorLoading, setMinorLoading] = useState(true)
+  // const [lodgeRef, setLodgeRef] = useState('')
+  const [formData, setFormData] = useState({
+    roomNumber: '',
+    available: true,
+    occupant: '',
+    occupantNumber:'',
+    price:0,
+    lodge:'',
+    lodgeRef: ''
+  })
+
+
+  const handleClick=async(e)=>{
+    e.preventDefault()
+
+    const id ='cCdllX2cPrPOf3DGcVro'
+    const lodgeRef = collection(db,'lodges')
+    const q = query(lodgeRef,where('name','==',lodge))
+    const lodgeSnap = await getDocs(q)
+
+    lodgeSnap.forEach((doc)=>{
+      console.log(doc.data());
+      formData.lodgeRef = doc.id
+    })
+
+    // console.log(formData);
+
+    // if(lodgeSnap.exists()){
+    //   lodgeSnap.data()
+    // }else{
+    //   console.log("nothing");
+    //   console.log(lodgeSnap);
+    // }
+    const docRef = await addDoc(collection(db,'rooms'),formData)
+    document.getElementById('my_modal_3').close()
+    console.log(('done')); 
+  }
+  const onChange = (e)=>{
+    setFormData((prevState)=>({
+      ...prevState,
+      [e.target.id]:e.target.value
+    }))
+
+    console.log(formData);
+  }
+  const {roomNumber, price,lodge} = formData
   useEffect(()=>{
     const checkDutyLevel = async()=>{
       const userRef = doc(db,'users', auth.currentUser.uid)
@@ -24,7 +71,14 @@ function Room() {
           // console.log(querySnap.data());
           // console.log(querySnap.data().duty);
           setWorkerDuty(querySnap.data().duty)
-          setLoading(false)
+
+          if(querySnap.data().duty === 'Admin' ||querySnap.data().duty === 'sunny'){
+            setLoading(false)
+            fetchRooms()
+            // console.log(formData);
+          }else{
+            setLoading(false)
+          }
           // console.log(workerDuty);
       }
       else{
@@ -36,15 +90,28 @@ function Room() {
     console.log('We are here');
   },[])
 
+  const fetchRooms = async()=>{
+    const docRef = collection(db,'rooms')
+
+    const docSnap = await getDocs(docRef)
+
+    const rooms = []
+
+    docSnap.forEach((doc)=>{
+      rooms.push({
+        id:doc.id,
+        data:doc.data()
+      })
+    })
+
+    console.log(rooms);
+    setRooms(rooms)
+    setMinorLoading(false)
+  }
+
   if(loading){
     return <Spinner/>
   }
-  // else if(workerDuty === 'Agent' || workerDuty === 'sunny'){
-  //   return <p className=' p-3 lg:p-8'>
-  //     You are not allowed to view this page
-  //   </p>
-  // }
-  // else if(workerDuty === 'Admin'){
     return (
       <div className=' p-3 lg:p-8'>
         {/* This is basically the modal that pops up when you want to create a user */}
@@ -60,11 +127,15 @@ function Room() {
               {/* if there is a button in form, it will close the modal */}
   
               <div>
-                <input type="text" className=" input input-md w-full input-bordered input-success mb-2 bg-transparent" placeholder="Enter Room Number" />
+                <input type="text" className=" input input-md w-full input-bordered input-success mb-2 bg-transparent" placeholder="Enter Room Number" id="roomNumber" value={roomNumber} onChange={onChange}/>
+              </div>
+
+              <div>
+                <input type="number" className=" input input-md w-full input-bordered input-success mb-2 bg-transparent" placeholder="price" id="price" value={price} onChange={onChange}/>
               </div>
   
               <div>
-                <select className="select select-md w-full max-w-xs bg-transparent input-success" >
+                <select className="select select-md w-full max-w-xs bg-transparent input-success" id="lodge" value={lodge} onChange={onChange} >
                   <option value={'val'}>Choose room's lodge</option>
                   <option value={'Lodge A'}>
                     Lodge A
@@ -85,24 +156,26 @@ function Room() {
             </form>
           </div>
         </dialog>
-        <header className=" flex justify-between lg:items-center">
+        <header className=" flex justify-between lg:items-center text-black">
           <div>
             <h1 className=" text-2xl font-semibold lg:text-4xl mb-2">
               Rooms
             </h1>
-            <p className=" lg:text-xl">
+            <p className=" py-2 lg:text-xl text-sm">
               See all rooms and their occupants
             </p>
           </div>
   
-          <button className={`btn btn-ghost btn-sm lg:btn-md ${workerDuty === 'Agent'&&'hidden'}`} disabled={workerDuty==='Agent'? true:false} onClick={()=>document.getElementById('my_modal_3').showModal()}>
+          <button className={`btn btn-outline btn-md lg:btn-lg ${workerDuty === 'Agent'&&'hidden'} hover:bg-black hover:text-white border-black text-black`} disabled={workerDuty==='Agent'? true:false} onClick={()=>document.getElementById('my_modal_3').showModal()}>
             <FaPlus/> Create room
           </button>
         </header>
         <main className="overflow-x-auto mt-8">
-          <table className="table table-sm lg:table-lg w-full lg:w-4/5 m-auto shadow-2xl bg-neutral-100 mb-3">
+        {
+                minorLoading? <Spinner/>:
+                <table className="table table-sm lg:table-lg w-full lg:w-4/5 m-auto shadow-2xl bg-neutral-100 mb-3">
             {/* head */}
-            <thead className="bg-neutral-500 text-sm lg:text-2xl">
+            <thead className="bg-neutral-500 text-sm lg:text-2xl text-white">
               <tr>
                 <th>
                   Room  <br className="lg:hidden" />Number
@@ -111,7 +184,7 @@ function Room() {
                   Occupant Name
                 </th>
                 <th>
-                  Occupant Number
+                  Occupant<br className="lg:hidden" /> Number
                 </th>
                 <th>
                   Available
@@ -122,8 +195,12 @@ function Room() {
               </tr>
             </thead>
             <tbody>
+              
+            {rooms.map((room)=>(
+                  <RoomItem key={room.id} room={room.data}/>
+                ))}
               {/* row 1 */}
-              <tr>
+              {/* <tr>
                 <td>
                   A2
                 </td>
@@ -139,9 +216,9 @@ function Room() {
                 <td>
                   Lodge A
                 </td>
-              </tr>
+              </tr> */}
               {/* row 2 */}
-              <tr>
+              {/* <tr>
                 <td>
                   B7
                 </td>
@@ -157,9 +234,9 @@ function Room() {
                 <td>
                   Lodge B
                 </td>
-              </tr>
+              </tr> */}
               {/* row 3 */}
-              <tr>
+              {/* <tr>
                 <td>
                   C12
                 </td>
@@ -175,10 +252,11 @@ function Room() {
                 <td>
                   Lodge C
                 </td>
-              </tr>
+              </tr> */}
   
             </tbody>
           </table>
+              }
         </main>
       </div>
     )
