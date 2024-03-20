@@ -42,6 +42,8 @@ function User() {
 
       await setDoc(doc(db,'users',userId),formDataCopy)
 
+      document.getElementById('my_modal_3').close()
+
       console.log('done');
     } catch (error) {
       console.log('error');
