@@ -1,6 +1,6 @@
 
 
-function LodgeItem({lodge,numberOfRooms}) {
+function LodgeItem({lodge}) {
   return (
     <tr>
         <td>
@@ -15,7 +15,7 @@ function LodgeItem({lodge,numberOfRooms}) {
         </td>
         <td>
             {
-                numberOfRooms
+                lodge.numberOfRooms
             }
         </td>
     </tr>
