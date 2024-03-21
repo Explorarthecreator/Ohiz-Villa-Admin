@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { FaPlus } from "react-icons/fa"
 import { getAuth } from "firebase/auth";
-import { addDoc, collection, doc, getDoc, getDocs, orderBy, query, serverTimestamp, setDoc, where } from "firebase/firestore";
+import { addDoc, collection, doc, getDoc, getDocs, orderBy, query, where } from "firebase/firestore";
 import { db } from "../firebase.config";
 import Spinner from "../components/Spinner";
 import RoomItem from "../components/RoomItem";
@@ -29,8 +29,6 @@ function Room() {
 
   const handleClick=async(e)=>{
     e.preventDefault()
-
-    const id ='cCdllX2cPrPOf3DGcVro'
     const lodgeRef = collection(db,'lodges')
     const q = query(lodgeRef,where('name','==',lodge))
     const lodgeSnap = await getDocs(q)
@@ -48,9 +46,14 @@ function Room() {
     //   console.log("nothing");
     //   console.log(lodgeSnap);
     // }
-    const docRef = await addDoc(collection(db,'rooms'),formData)
-    document.getElementById('my_modal_3').close()
-    console.log(('done')); 
+    await addDoc(collection(db,'rooms'),formData)
+    .then(()=>{
+      document.getElementById('my_modal_3').close()
+      console.log(('done'));
+    }).catch((error)=>{
+      console.log(error);
+    })
+     
   }
   const onChange = (e)=>{
     setFormData((prevState)=>({
@@ -193,7 +196,7 @@ function Room() {
                   Available
                 </th>
                 <th>
-                  Lodge
+                  
                 </th>
               </tr>
             </thead>

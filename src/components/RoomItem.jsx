@@ -1,3 +1,4 @@
+import { FaPen } from "react-icons/fa"
 
 function RoomItem({room}) {
   return (
@@ -23,9 +24,7 @@ function RoomItem({room}) {
             }
         </td>
         <td>
-            {
-                room.lodge
-            }
+            <FaPen className=" cursor-pointer"/>
         </td>
     </tr>
   )
