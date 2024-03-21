@@ -5,6 +5,7 @@ import { setDoc, doc, serverTimestamp, getDoc, collection, getDocs} from "fireba
 import { db } from "../firebase.config"
 import Spinner from "../components/Spinner"
 import UserItem from "../components/UserItem"
+import BoxSpinner from "../components/BoxSpinner"
 
 function User() {
   const auth = getAuth()
@@ -170,9 +171,7 @@ function User() {
         <main className="overflow-x-auto mt-8">
           {
             minorLoading? 
-            <div className=" h-5/6 flex items-center justify-center mt-20">
-               <span className="loading loading-bars w-24 text-black"></span>
-            </div> :
+            <BoxSpinner/> :
             <table className="table table-sm lg:table-lg w-full lg:w-4/5 m-auto shadow-2xl bg-neutral-100 mb-8">
             {/* head */}
             <thead className="bg-neutral-500 text-white text-lg lg:text-2xl">
