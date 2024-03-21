@@ -1,10 +1,11 @@
 import { useState, useEffect } from "react";
 import { FaPlus } from "react-icons/fa"
 import { getAuth } from "firebase/auth";
-import { addDoc, collection, doc, getDoc, getDocs, query, serverTimestamp, setDoc, where } from "firebase/firestore";
+import { addDoc, collection, doc, getDoc, getDocs, orderBy, query, serverTimestamp, setDoc, where } from "firebase/firestore";
 import { db } from "../firebase.config";
 import Spinner from "../components/Spinner";
 import RoomItem from "../components/RoomItem";
+import BoxSpinner from "../components/BoxSpinner";
 
 function Room() {
  
@@ -93,7 +94,9 @@ function Room() {
   const fetchRooms = async()=>{
     const docRef = collection(db,'rooms')
 
-    const docSnap = await getDocs(docRef)
+    const q = query(docRef,orderBy('roomNumber'))
+
+    const docSnap = await getDocs(q)
 
     const rooms = []
 
@@ -172,7 +175,7 @@ function Room() {
         </header>
         <main className="overflow-x-auto mt-8">
         {
-                minorLoading? <Spinner/>:
+                minorLoading? <BoxSpinner/>:
                 <table className="table table-sm lg:table-lg w-full lg:w-4/5 m-auto shadow-2xl bg-neutral-100 mb-3">
             {/* head */}
             <thead className="bg-neutral-500 text-sm lg:text-2xl text-white">
