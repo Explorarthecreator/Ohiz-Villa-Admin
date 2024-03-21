@@ -1,6 +1,6 @@
 import { getAuth } from "firebase/auth";
 import { useState, useEffect } from "react";
-import { addDoc, collection, doc, getDoc, getDocs, query, where } from "firebase/firestore";
+import { addDoc, collection, doc, getDoc, getDocs, orderBy, query} from "firebase/firestore";
 import { db } from "../firebase.config";
 import { FaPlus } from "react-icons/fa"
 import Spinner from "../components/Spinner";
@@ -32,31 +32,32 @@ function Lodge() {
     // console.log("object");
     // console.log(number);
 
-    const docRef = await addDoc(collection(db,'lodges'),formData)
-
-    console.log(formData);
-    // const ne = name.charAt(name.length -1)
-    const rooms =[]
-    for(let i = 0;i<numberOfRooms;i++){
-      // console.log(i+1);
-      // console.log(ne);
-      
-      rooms.push({
-        roomNumber: `${shortName.toUpperCase()}${i+1}`,
-        lodgeRef: docRef.id,
-        occupant: '',
-        available: true,
-        price: 120000,
-        occupantNumber:''
+    await addDoc(collection(db,'lodges'),formData).then((docRef)=>{
+      console.log(formData);
+      // const ne = name.charAt(name.length -1)
+      const rooms =[]
+      for(let i = 0;i<numberOfRooms;i++){
+        rooms.push({
+          roomNumber: `${shortName.toUpperCase()}${i+1}`,
+          lodgeRef: docRef.id,
+          occupant: '',
+          available: true,
+          price: 120000,
+          occupantNumber:''
+        })
+      }
+      rooms.forEach(async (room)=>{
+        await addDoc(collection(db,'rooms'),room)
       })
-    }
-    rooms.forEach(async (room)=>{
-      await addDoc(collection(db,'rooms'),room)
+
+      document.getElementById('my_modal_3').close()
+      setButtonLoading(false)
+      console.log(rooms);
+    }).catch((error)=>{
+      console.log(error);
     })
 
-    document.getElementById('my_modal_3').close()
-    setButtonLoading(false)
-    console.log(rooms);
+    
   }
   const onChange = (e)=>{
     // setNumber(e.target.value)
@@ -81,7 +82,8 @@ function Lodge() {
           if(querySnap.data().duty === 'Admin' ||querySnap.data().duty === 'sunny'){
 
             setLoading(false)
-            const logdeSnap = await getDocs(collection(db,'lodges'))
+            const q = query(collection(db,'lodges'), orderBy('name'))
+            const logdeSnap = await getDocs(q)
 
             const lodges =[]
 
