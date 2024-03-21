@@ -114,6 +114,7 @@ function Lodge() {
     checkDutyLevel()
     console.log(lodge);
     console.log('We are here');
+    // eslint-disable-next-line 
   },[])
 
   if(loading){

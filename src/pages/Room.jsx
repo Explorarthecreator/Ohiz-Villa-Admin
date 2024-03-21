@@ -92,6 +92,8 @@ function Room() {
     }
     checkDutyLevel()
     console.log('We are here');
+
+    // eslint-disable-next-line 
   },[])
 
   const fetchRooms = async()=>{
