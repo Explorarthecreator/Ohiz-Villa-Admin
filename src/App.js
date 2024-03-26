@@ -1,4 +1,5 @@
 import { SpeedInsights } from "@vercel/speed-insights/react"
+import { Analytics } from "@vercel/analytics/react"
 import { BrowserRouter as Router,Routes, Route } from "react-router-dom";
 import Navbar from "./components/Navbar";
 import Room from "./pages/Room";
@@ -34,6 +35,7 @@ function App() {
         </Router>
       </div>
       <SpeedInsights/>
+      <Analytics/>
     </NavbarProvider>
   );
 }
