@@ -89,6 +89,7 @@ function Lodge() {
             setMLoading(false)
           }else{
             setLoading(false)
+            setMLoading(false)
           }
 
       }
@@ -103,6 +104,10 @@ function Lodge() {
 
   if(loading){
     return <Spinner/>
+  }else if(workerDuty === 'Agent'){
+    return <p className=' p-3 lg:p-8'>
+      You are not allowed to view this page
+    </p>
   }
   return (
     <div className=' p-3 lg:p-8'>
