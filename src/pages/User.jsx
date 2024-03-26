@@ -31,21 +31,17 @@ function User() {
     try {
       const auth = getAuth()
 
-      const userCredential = await createUserWithEmailAndPassword(auth,email,password)
+      await createUserWithEmailAndPassword(auth,email,password).then(async userCredential=>{
+        const formDataCopy = {...formData}
+        delete formDataCopy.password
 
-      const userId = userCredential.user.uid
+        formDataCopy.timestamp =serverTimestamp()
 
-      const formDataCopy = {...formData}
-
-      delete formDataCopy.password
-
-      formDataCopy.timestamp =serverTimestamp()
-
-      await setDoc(doc(db,'users',userId),formDataCopy)
-
-      document.getElementById('my_modal_3').close()
-
-      console.log('done');
+        await setDoc(doc(db,'users',userCredential.providerId),formDataCopy)
+        document.getElementById('my_modal_3').close()
+      }).catch((error)=>{
+        console.log(error);
+      })
     } catch (error) {
       console.log('error');
       console.log(error);
@@ -59,8 +55,6 @@ function User() {
       const querySnap = await getDoc(userRef)
 
       if(querySnap.exists()){
-          console.log('Exists');
-          console.log(querySnap.data().duty);
           setWorkerDuty(querySnap.data().duty)
           if(querySnap.data().duty === 'Admin'){
             // This is where the request for the data will be made
@@ -68,7 +62,6 @@ function User() {
             fetchUsers()
           }else{
             setLoading(false)
-            console.log('object');
           }
       }
       else{
@@ -77,7 +70,6 @@ function User() {
 
     }
     checkDutyLevel()
-    console.log('We are here');
     // eslint-disable-next-line
   },[])
 
@@ -93,11 +85,8 @@ function User() {
         data:dc.data()
       })
     })
-
-    console.log(users);
     setUsers(users)
     setMinorLoading(false)
-    // console.log(docSnap.docs);
   }
 
 
@@ -188,52 +177,12 @@ function User() {
               </tr>
             </thead>
             <tbody >
-
               {users.map((user)=>(
                 <UserItem user={user.data} key={user.id}/>
               ))}
-              {/* row 1 */}
-              {/* <tr>
-                <td>Cy Ganderton</td>
-                <td>Quality Control Specialist</td>
-                <td>Blue</td>
-              </tr> */}
-              {/* row 2 */}
-              {/* <tr>
-                <td>Hart Hagerty</td>
-                <td>Desktop Support Technician</td>
-                <td>Purple</td>
-              </tr> */}
-              {/* row 3 */}
-              {/* <tr>
-                <td>Brice Swyre</td>
-                <td>Tax Accountant</td>
-                <td>Red</td>
-              </tr> */}
-  
-              {/* row 1 */}
-              {/* <tr>
-                <td>Cy Ganderton</td>
-                <td>Quality Control Specialist</td>
-                <td>Blue</td>
-              </tr> */}
-              {/* row 2 */}
-              {/* <tr>
-                <td>Hart Hagerty</td>
-                <td>Desktop Support Technician</td>
-                <td>Purple</td>
-              </tr> */}
-              {/* row 3 */}
-              {/* <tr>
-                <td>Brice Swyre</td>
-                <td>Tax Accountant</td>
-                <td>Red</td>
-              </tr> */}
             </tbody>
           </table>
           }
-  
-          
         </main>
       </div>
     )
