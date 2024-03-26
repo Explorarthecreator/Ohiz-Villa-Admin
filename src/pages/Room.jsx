@@ -15,6 +15,7 @@ function Room() {
   const [minorLoading, setMinorLoading] = useState(true)
   const [showButton, setShowButton] = useState(false)
   const [roomId, setRoomId] = useState('')
+  const [edit, setEdit] = useState(false)
   const [formData, setFormData] = useState({})
 
 
@@ -53,12 +54,12 @@ function Room() {
 
       if(querySnap.exists()){
           setWorkerDuty(querySnap.data().duty)
+          setLoading(false)
+          fetchRooms()
+
 
           if(querySnap.data().duty === 'Admin' ||querySnap.data().duty === 'sunny'){
-            setLoading(false)
-            fetchRooms()
-          }else{
-            setLoading(false)
+            setEdit(true)
           }
       }
       else{
@@ -175,7 +176,7 @@ function Room() {
             <tbody>
               
             {rooms.map((room)=>(
-                  <RoomItem key={room.id} room={room.data} handleEdit={handleEdit}/>
+                  <RoomItem key={room.id} room={room.data} handleEdit={handleEdit} edit={edit}/>
             ))}
             </tbody>
           </table>

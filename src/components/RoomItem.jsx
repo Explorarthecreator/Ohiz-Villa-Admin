@@ -1,6 +1,6 @@
 import { FaPen } from "react-icons/fa"
 
-function RoomItem({room,handleEdit }) {
+function RoomItem({room,handleEdit, edit }) {
   return (
     <tr>
         <td>
@@ -23,9 +23,11 @@ function RoomItem({room,handleEdit }) {
                 room.available?'Yes':'No'
             }
         </td>
-        <td>
-            <FaPen className=" cursor-pointer" onClick={()=>handleEdit(room)}/>
-        </td>
+        {
+            edit && <td>
+                        <FaPen className=" cursor-pointer" onClick={()=>handleEdit(room)}/>
+                    </td>
+        }
     </tr>
   )
 }
