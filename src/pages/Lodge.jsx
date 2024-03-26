@@ -29,12 +29,9 @@ function Lodge() {
   const handleClick=async(e)=>{
     setButtonLoading(true)
     e.preventDefault()
-    // console.log("object");
-    // console.log(number);
-
     await addDoc(collection(db,'lodges'),formData).then((docRef)=>{
       console.log(formData);
-      // const ne = name.charAt(name.length -1)
+
       const rooms =[]
       for(let i = 0;i<numberOfRooms;i++){
         rooms.push({
@@ -52,7 +49,6 @@ function Lodge() {
 
       document.getElementById('my_modal_3').close()
       setButtonLoading(false)
-      console.log(rooms);
     }).catch((error)=>{
       console.log(error);
     })
@@ -60,9 +56,6 @@ function Lodge() {
     
   }
   const onChange = (e)=>{
-    // setNumber(e.target.value)
-
-    // // console.log(number);
       setFormData((prevState)=>({
         ...prevState,
         [e.target.id]:e.target.value
@@ -75,8 +68,6 @@ function Lodge() {
       const querySnap = await getDoc(userRef)
 
       if(querySnap.exists()){
-          console.log('Exists');
-
           setWorkerDuty(querySnap.data().duty)
 
           if(querySnap.data().duty === 'Admin' ||querySnap.data().duty === 'sunny'){
@@ -95,12 +86,7 @@ function Lodge() {
             })
 
             setLodge(lodges)
-
-            console.log(lodges);
             setMLoading(false)
-
-            
-            // console.log((await logdeSnap).siz);
           }else{
             setLoading(false)
           }
@@ -112,8 +98,6 @@ function Lodge() {
 
     }
     checkDutyLevel()
-    console.log(lodge);
-    console.log('We are here');
     // eslint-disable-next-line 
   },[])
 
@@ -198,55 +182,6 @@ function Lodge() {
                 <LodgeItem lodge={lo.data} key={lo.id}/>
               ))
             }
-            {/* row 1 */}
-            {/* <tr>
-              <td>Cy Ganderton</td>
-              <td>Quality Control Specialist</td>
-              <td>
-                10
-              </td>
-            </tr> */}
-            {/* row 2 */}
-            {/* <tr>
-              <td>Hart Hagerty</td>
-              <td>Desktop Support Technician</td>
-              <td>
-                8
-              </td>
-            </tr> */}
-            {/* row 3 */}
-            {/* <tr>
-              <td>Brice Swyre</td>
-              <td>Tax Accountant</td>
-              <td>
-                38
-              </td>
-            </tr> */}
-
-            {/* row 1 */}
-            {/* <tr>
-              <td>Cy Ganderton</td>
-              <td>Quality Control Specialist</td>
-              <td>
-                12
-              </td>
-            </tr> */}
-            {/* row 2 */}
-            {/* <tr>
-              <td>Hart Hagerty</td>
-              <td>Desktop Support Technician</td>
-              <td>
-                23
-              </td>
-            </tr> */}
-            {/* row 3 */}
-            {/* <tr>
-              <td>Brice Swyre</td>
-              <td>Tax Accountant</td>
-              <td>
-                19
-              </td>
-            </tr> */}
           </tbody>
           </table>
         }
