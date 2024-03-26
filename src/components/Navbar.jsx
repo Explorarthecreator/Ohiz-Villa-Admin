@@ -17,10 +17,14 @@ function Navbar() {
             <p className="absolute top-5 right-4 cursor-pointer text-2xl lg:hidden" onClick={()=>{setShownav(!shownav  )}}>
                 <FaTimes />
             </p>
-            <div className=" bg-red-500 w-28 h-28 rounded-full"></div>
+            <div className=" border-b-4 w-full"> 
+                <div className=" bg-red-500 h-20 w-20 lg:w-28 lg:h-28  rounded-full m-auto"></div>
+                <h1 className=" text-center my-5 font-semibold text-xl lg:text-3xl">
+                    Ohiz Villa
+                </h1>
+            </div>
             <ul className=" w-4/5 md:w-4/5 lg:w-2/3">
                 <li className={`cursor-pointer flex px-4 py-2 gap-4 items-center ${pathMatchRoute('/')?'bg-[#b4cd93] rounded-lg':''}`} onClick={()=>navigate('/')}>
-                    {/* <ExploreIcon fill={pathMatchRoute('/')?'#2c2c2c':'#8f8f8f'} width={'36px'} height={'36px'}/> */}
                     <FaUser size={25}/>
                     <p className=' font-medium'>
                         User
